@@ -201,3 +201,33 @@ exact open subquestions). Budgets: iter 5/40, consults 1/12.
   (a=13, e=36, ~1.5e9 cands estimated, 110 chunks RUNNING -> would give shores>=14, n<=27.)
 - n=14 SLICE CLOSED DOUBLE-VERIFIED (mod-110 + mod-73 identical): 21,609,301 graphs
   (= published count), 0 six-regular 4-VC at n=14 => Problem 5.2 needs n >= 15.
+
+# (2026-06-11 ~00:50) Shore-exclusion audit: 9..14 ALL EXCLUDED
+- [VERIFIED NUMERICALLY] The generalized shore filter has complete 110-chunk
+  coverage for `a = 12, 13, 14`; each chunk has a well-formed summary, no
+  missing `.out`/`.err` files, and no nonempty `.err` files.
+- Aggregate results:
+  * `a=9`: `total=729 badDeficiency=0 not3col=711 badBoundaryVec=9 comparableNonNbr=8 localKill=1 SURVIVORS=0`
+    (`shore9_certs.txt`; independently checked by the earlier Python recount/kill scripts).
+  * `a=10`: `total=18655 badDeficiency=0 not3col=18345 badBoundaryVec=197 comparableNonNbr=86 localKill=27 SURVIVORS=0`
+    (`shore10_certs.txt`; independently checked by `verify_10shore.py`).
+  * `a=11`: `total=696208 badDeficiency=0 not3col=687377 badBoundaryVec=6013 comparableNonNbr=1300 localKill=1518 SURVIVORS=0`
+    (`shore11.out`; independent Python full recount `shore11_py.out` matches).
+  * `a=12`: `total=32833744 not3col=32484081 badBoundaryVec=241863 comparableNonNbr=27322 localKill=80478 SURVIVORS=0`
+    (`shore12_chunks`, 110/110 chunks).
+  * `a=13`: `total=1839349287 not3col=1822133664 badBoundaryVec=11944366 comparableNonNbr=788481 localKill=4482776 SURVIVORS=0`
+    (`shore13_chunks`, 110/110 chunks).
+  * `a=14`: `total=154941621 not3col=115063872 badBoundaryVec=32712357 comparableNonNbr=1752943 localKill=5412449 SURVIVORS=0`
+    (`shore14_chunks`, 110/110 chunks).
+- [INDEPENDENT SAMPLE CHECKS] `verify_shore_indep.py` is an independent Python
+  implementation of the full filter battery. Full Python recount is complete for
+  `a=11`. For larger `a`, residue/sample comparisons were run:
+  * `a=13`, residue `0/100000`: C++ and Python both give
+    `total=13350 not3col=13313 badvec=20 badtwin=0 localKill=17 SURVIVORS=0`.
+  * `a=14`, first 5000 graph6 lines: C++ and Python both give
+    `total=5000 not3col=936 badvec=3589 badtwin=430 localKill=45 SURVIVORS=0`.
+- Current theorem: in a 6-regular `(4,1)` target, every nontrivial 6-edge-cut
+  shore has at least 15 vertices. Therefore every 6-regular target on
+  `n <= 29` is super-6-edge-connected.
+- Scope warning: this theorem depends on 6-regularity and on the generalized
+  local-kill necessary condition using boundary deficiency `b(v)=6-deg_A(v)`.

@@ -12,7 +12,7 @@ Current publishable-secondary candidate is narrower:
 1. verified exhaustive lower bound for the Skottova-Steiner 2025 Problem 5.2
    subproblem: no 6-regular `(4,1)` graph on `n <= 14`;
 2. structural rigidity lemmas for any hypothetical 6-regular target, including
-   no nontrivial 6-edge-cut shore of size at most 10 in the 6-regular case.
+   no nontrivial 6-edge-cut shore of size at most 14 in the 6-regular case.
 
 This is not yet a full resolution of #944.
 
@@ -93,6 +93,20 @@ This is not yet a full resolution of #944.
     6-regular `(4,1)` target; combined with the previous exclusions, all such
     shores have size at least `11`.
 
+- `experiments/sixreg/enum_shore.cpp`,
+  `experiments/sixreg/verify_shore_indep.py`
+  - Generalized shore filter for sizes `a=9..14`.
+  - Full C++ chunk coverage:
+    - `a=11`: `total=696208 not3col=687377 badBoundaryVec=6013 comparableNonNbr=1300 localKill=1518 SURVIVORS=0`;
+      independent full Python recount matches.
+    - `a=12`: 110/110 chunks, `total=32833744 not3col=32484081 badBoundaryVec=241863 comparableNonNbr=27322 localKill=80478 SURVIVORS=0`.
+    - `a=13`: 110/110 chunks, `total=1839349287 not3col=1822133664 badBoundaryVec=11944366 comparableNonNbr=788481 localKill=4482776 SURVIVORS=0`.
+    - `a=14`: 110/110 chunks, `total=154941621 not3col=115063872 badBoundaryVec=32712357 comparableNonNbr=1752943 localKill=5412449 SURVIVORS=0`.
+  - Independent Python spot checks agree for an `a=13` residue sample and an
+    `a=14` 5000-line graph6 sample.
+  - Conclusion: no nontrivial 6-edge-cut shore has size `9..14` in a
+    6-regular `(4,1)` target; all such shores have size at least `15`.
+
 ## Pending / Needs Stronger Evidence
 
 - teorth PR #314 is open/ready for review with a one-line database comment.
@@ -112,7 +126,7 @@ and adversarial verification:
 - monitor/respond to teorth PR #314 review;
 - manually add the artifact link to PR #314 if a reviewer asks or browser input
   becomes available;
-- fold the `n=14` closure and 9/10-shore exclusions into the public artifact
+- fold the `n=14` closure and 9..14-shore exclusions into the public artifact
   branch / PR wording after final review.
 
 ## Publication Status

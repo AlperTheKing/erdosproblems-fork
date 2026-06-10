@@ -274,6 +274,45 @@ Corollary 7a: every nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has both
 shores of size `>= 11`; in particular for `n <= 21` every such graph is
 super-6-edge-connected. This strengthened corollary also uses 6-regularity.
 
+### Lemma 8: No 11-, 12-, 13-, or 14-shores in the 6-regular case
+
+No nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has a shore of size
+`11..14`.
+
+For these sizes we use the generalized shore filter
+`experiments/sixreg/enum_shore.cpp`. For a shore `A` of size `a`, the filter
+uses the same necessary conditions as above plus the generalized local
+multiplicity test: for every vertex `v in A`, there must be a proper
+3-colouring of `G[A]-v` for which
+
+```text
+sum_i max(0, 2 - |N_A(v) cap colour_i|) <= b(v),
+```
+
+where `b(v)=6-deg_A(v)`. This is necessary because in any 3-colouring of
+`G-v`, Lemma 1 requires every colour to appear at least twice in `N_G(v)`, and
+the missing appearances can only be supplied by the `b(v)` cut-neighbours of
+`v`.
+
+The complete native C++ chunk results are:
+
+```text
+a=11: total=696208 not3col=687377 badBoundaryVec=6013 comparableNonNbr=1300 localKill=1518 SURVIVORS=0
+a=12: total=32833744 not3col=32484081 badBoundaryVec=241863 comparableNonNbr=27322 localKill=80478 SURVIVORS=0
+a=13: total=1839349287 not3col=1822133664 badBoundaryVec=11944366 comparableNonNbr=788481 localKill=4482776 SURVIVORS=0
+a=14: total=154941621 not3col=115063872 badBoundaryVec=32712357 comparableNonNbr=1752943 localKill=5412449 SURVIVORS=0
+```
+
+For `a=12,13,14` the runs use 110 `geng` residue chunks; all 110 summaries are
+present and well-formed for each size. The `a=11` run also has an independent
+full Python recount matching the C++ result. For larger sizes, independent
+Python spot checks agree on an `a=13` residue sample and an `a=14` 5000-line
+graph6 sample.
+
+Corollary 8a: every nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has both
+shores of size `>= 15`; in particular for `n <= 29` every such graph is
+super-6-edge-connected. This corollary is specific to the 6-regular subproblem.
+
 ## Lean / Formal Cores
 
 `E:\Projects\ErdosProblems\formal-conjectures\erdos944_cores.lean` compiles
