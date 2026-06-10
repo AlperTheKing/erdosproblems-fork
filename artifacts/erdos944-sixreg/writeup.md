@@ -14,13 +14,13 @@ Let a `(4,1)` graph mean a finite simple graph `G` such that:
 Skottova-Steiner 2025 ask explicitly whether a 6-regular `(4,1)` graph exists
 (Problem 5.2). The present verified package proves:
 
-1. no 6-regular `(4,1)` graph exists on at most 13 vertices;
+1. no 6-regular `(4,1)` graph exists on at most 14 vertices;
 2. every hypothetical 6-regular `(4,1)` graph satisfies several additional
    rigidity conditions.
 
 ## Computational Theorem
 
-There is no 6-regular `(4,1)` graph on `n <= 13` vertices.
+There is no 6-regular `(4,1)` graph on `n <= 14` vertices.
 
 The exhaustive checker summaries are below. The counts are SMS stream entries;
 when the SMS minimality cutoff is reached the stream may contain isomorphic
@@ -30,6 +30,7 @@ duplicates, but this cannot create a false negative for the `TARGET=0` claim.
 n=11: total=266 threecol=3 notVC=263 vcWithCritEdge=0 TARGET=0
 n=12: total=7849 threecol=50 notVC=7799 vcWithCritEdge=0 TARGET=0
 n=13: total=367860 threecol=849 notVC=367010 vcWithCritEdge=1 TARGET=0
+n=14: total=21609301 threecol=42667 notVC=21566634 vcWithCritEdge=0 TARGET=0 badline=0
 ```
 
 At `n=13` the stream contains one 6-regular 4-vertex-critical entry, and it has
@@ -46,9 +47,11 @@ critical edges. Facts about this unique graph
 So the smallest 6-regular 4-vertex-critical graph fails the target conditions
 "everywhere locally", not marginally.
 
-The n=14 slice (~21.6M graphs expected) is running
-(`experiments/sixreg/check_n14_live.out`); a TARGET hit there would resolve
-SkSt25 Problem 5.2 positively, a clean sweep extends the bound to `n >= 15`.
+The n=14 slice was checked twice by different native chunk partitions:
+`experiments/sixreg/n14_chunks` (110 residue classes) and
+`experiments/sixreg/n14_chunks_v2` (73 residue classes). Both aggregate to the
+same totals above with `badline=0`. Hence any 6-regular `(4,1)` graph, if one
+exists, has at least 15 vertices.
 
 Artifacts:
 
@@ -58,6 +61,7 @@ Artifacts:
 - `experiments/sixreg/check_n11_summary2.out`;
 - `experiments/sixreg/check_n12_summary2.out`;
 - `experiments/sixreg/check_n13_summary2.out`;
+- `experiments/sixreg/n14_chunks`, `n14_chunks_v2`;
 - `experiments/sixreg/unique_6reg_4vc_n13.txt`.
 
 ## Rigidity Lemmas
@@ -184,6 +188,55 @@ super-6-edge-connected (its only 6-edge-cuts are vertex stars). The same holds
 for general `(4,1)` graphs with `delta >= 6` since the shore-degree equality in
 the proof forces degree exactly 6 on the shore.
 
+### Lemma 6: No 9-shores in the 6-regular case
+
+No nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has a shore of size 9.
+
+This is a finite, machine-assisted lemma. If `A` is such a shore, then
+`e(G[A]) = 24`, `Delta(G[A]) <= 6`, and with
+`b(v) = 6 - deg_{G[A]}(v)` we have `sum_v b(v)=6`. The 6-cut matrix theorem
+forces every proper 3-colouring of `G[A]` to have boundary-deficiency vector,
+up to permutation, in
+
+```text
+(6,0,0), (4,1,1), (3,3,0), (2,2,2).
+```
+
+Running
+
+```powershell
+geng -c -D6 9 24:24 | enum_9shore.exe
+```
+
+checks 729 connected candidates. The classification is:
+
+```text
+total=729 badDeficiency=0 not3col=711 badBoundaryVec=9 comparableNonNbr=8 SURVIVORS=1
+```
+
+The unique survivor is graph6 `HEzftz{`, with `b=011101110`. An independent
+Python recount (`verify_9shore_survivor.py`) gives the same classification and
+prints the survivor edge list.
+
+Finally, the survivor has internal vertices `0,4,8` where `b(v)=0`, so
+`N_G(v)=N_{G[A]}(v)`. For each of these vertices, the independent kill script
+enumerates all 6 proper 3-colourings of `G[A]-v` and finds that none has all
+three colours appearing at least twice on `N(v)`:
+
+```text
+v=0: colourings of H-v: 6, with all counts>=2 on N(v): 0
+v=4: colourings of H-v: 6, with all counts>=2 on N(v): 0
+v=8: colourings of H-v: 6, with all counts>=2 on N(v): 0
+```
+
+This contradicts Lemma 1 applied to a 3-colouring of `G-v`, restricted to
+`G[A]-v`. Therefore the survivor cannot occur as a shore.
+
+Corollary 6a: every nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has both
+shores of size `>= 10`; in particular for `n <= 19` every such graph is
+super-6-edge-connected. This corollary uses 6-regularity and is not being
+claimed for general `delta >= 6` graphs.
+
 ## Lean / Formal Cores
 
 `E:\Projects\ErdosProblems\formal-conjectures\erdos944_cores.lean` compiles
@@ -208,7 +261,8 @@ Axiom report (`#print axioms`, 2026-06-10):
   before publication;
 - final novelty sweep against Skottova-Steiner, Martinsson-Steiner, Jensen,
   Brown, Lattanzio, problem-page history, and citation graph;
-- n=14 slice in flight (see Computational Theorem section);
+- fold the n=14 closure and 9-shore exclusion into the public artifact branch
+  and PR wording after final review;
 - decide whether to add Lean coverage for Lemmas 2, 4, 4b and the non-adjacent
   twins endpoint of Lemma 5;
 - write final PR language only if the novelty gate remains clean.

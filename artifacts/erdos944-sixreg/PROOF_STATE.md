@@ -119,3 +119,59 @@ exact open subquestions). Budgets: iter 5/40, consults 1/12.
 - PRs: deepmind #4218 all CI green (Build+CLA), no human review yet; teorth #313 open, no comments.
 - NEXT: cold-context red-team (new GPT thread) -> writeup -> publish (teorth problems.yaml #944
   comment PR + optional formal-conjectures 944.lean).
+
+# (2026-06-11 ~00:10) Verified n=14 closure and 9-shore exclusion
+- [VERIFIED NUMERICALLY, DOUBLE CHUNK CHECK] The 6-regular n=14 enumeration is closed:
+  two independent native chunk partitions give the same totals.
+  * `experiments/sixreg/n14_chunks` (110 residue classes):
+    `total=21609301 threecol=42667 notVC=21566634 vcWithCritEdge=0 TARGET=0 badline=0`.
+  * `experiments/sixreg/n14_chunks_v2` (73 residue classes):
+    `total=21609301 threecol=42667 notVC=21566634 vcWithCritEdge=0 TARGET=0 badline=0`.
+  Thus there is no 6-regular 4-vertex-critical graph on 14 vertices at all, hence no
+  6-regular `(4,1)` target on `n <= 14`. The redundant live stream rerun
+  (`smsg`/`check_stream_mt`) was stopped after this verification.
+- [VERIFIED NUMERICALLY + T1 local argument] No 9-vertex shore of a nontrivial
+  6-edge-cut can occur in a 6-regular `(4,1)` target.
+  * Candidate setup: a 9-shore `A` has `e(G[A]) = 24`, `Delta(G[A]) <= 6`, and
+    deficiency vector `b(v) = 6 - deg_A(v)` with total 6.
+  * Exhaustive nauty/C++ filter:
+    `geng -c -D6 9 24:24 | enum_9shore.exe` classifies 729 connected candidates:
+    `711` not 3-colourable, `9` violate the 6-cut boundary-vector condition, `8`
+    have a comparable non-neighbour at a `b=0` vertex, and exactly one survives:
+    graph6 `HEzftz{`, `b=011101110`, `ncol=6`.
+  * Independent Python recount (`verify_9shore_survivor.py`) reproduces the same
+    `711/9/8/1` classification and prints the survivor edge list.
+  * Kill test (`kill_9shore_survivor.py`): the survivor has internal vertices
+    `{0,4,8}`. For each such vertex `v`, all 6 proper 3-colourings of `H-v`
+    leave some colour appearing at most once on `N_H(v) = N_G(v)`, contradicting
+    the local multiplicity lemma. Hence the survivor cannot embed as a 9-shore.
+  Conclusion: in a 6-regular `(4,1)` target every nontrivial 6-edge-cut shore has
+  size at least 10, and therefore any such graph on `n <= 19` is
+  super-6-edge-connected (only vertex-star 6-cuts).
+- Scope warning: the 9-shore exclusion uses 6-regularity (`b(v)=6-deg_A(v)` and
+  internal vertices with `N_G(v)=N_A(v)`). Do not state it for general
+  `delta >= 6` targets without a separate argument.
+
+# (2026-06-11 ~00:20) SHORE-EXCLUSION MACHINE: 9,10,11,12 ALL EXCLUDED (a=13 running)
+- Native pipeline (user directive: no WSL): geng.exe (nauty 2.8.9, clang-built, validated
+  vs SMS chain exactly) + enum_shore.cpp filter battery, all NECESSARY conditions:
+  [B] b(v)=6-deg in [0,5]; [C] 3-colourable + EVERY colouring's deficiency-weighted
+  boundary vector in {(6,0,0),(3,3,0),(4,1,1),(2,2,2)} (T4.3 row sums, beta-independent);
+  [T] folklore comparable-nonneighbours at b=0 vertices; [K] GENERALIZED local kill:
+  for every v, exists proper colouring of H-v with sum_i max(0,2-cnt_{N_A(v)}(i)) <= b(v)
+  (necessity: chi(G-v)=3 colouring needs every colour >=2 on N_G(v) by Lemma 1.1+target,
+  cut neighbours supply at most b(v)).
+- G[A] connected forced (any component would use all 6 cut edges; a second component
+  disconnects G). e(G[A]) = 3a-3 exact (6-regular).
+- RESULTS (native C++; a=9,10 also independently verified in Python):
+  a=9:  729 cands: 711 not3col, 9 badvec, 8 twins, 1 localKill (H=K333-rainbow-matching,
+        g6 HEzftz{, killed: all 6 colourings of H-v leave a colour <=1 on N(v), v in
+        {0,4,8}; ALSO 3^8 brute-force confirmed) => 0 SURVIVORS.
+  a=10: 18,655: 18,345/197/86/27 => 0 SURVIVORS.
+  a=11: 696,208: 687,377/6,013/1,300/1,518 => 0 SURVIVORS.
+  a=12: 32,833,744 (110 chunks): 32,484,081/241,863/27,322/80,478 => 0 SURVIVORS.
+- THEOREM (current): every nontrivial 6-edge-cut shore in a 6-regular (4,1)-graph has
+  >= 13 vertices => every 6-regular target on n <= 25 is super-6-edge-connected.
+  (a=13, e=36, ~1.5e9 cands estimated, 110 chunks RUNNING -> would give shores>=14, n<=27.)
+- n=14 SLICE CLOSED DOUBLE-VERIFIED (mod-110 + mod-73 identical): 21,609,301 graphs
+  (= published count), 0 six-regular 4-VC at n=14 => Problem 5.2 needs n >= 15.

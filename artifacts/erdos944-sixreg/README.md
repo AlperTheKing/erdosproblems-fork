@@ -10,7 +10,12 @@ Dirac/Erdős case remains open.
 
 The verified partial result is:
 
-> There is no 6-regular `(4,1)` graph on at most 13 vertices.
+> There is no 6-regular `(4,1)` graph on at most 14 vertices.
+
+The package also records the verified 6-cut rigidity statement:
+
+> In a 6-regular `(4,1)` graph, every nontrivial 6-edge-cut shore has at least
+> 10 vertices.
 
 Here `(4,1)` means a 4-vertex-critical graph with no critical edge.
 Skottova-Steiner 2025 ask explicitly whether a 6-regular `(4,1)` graph exists
@@ -33,11 +38,12 @@ as Problem 5.2.
 n=11: total=266 threecol=3 notVC=263 vcWithCritEdge=0 TARGET=0
 n=12: total=7849 threecol=50 notVC=7799 vcWithCritEdge=0 TARGET=0
 n=13: total=367860 threecol=849 notVC=367010 vcWithCritEdge=1 TARGET=0
+n=14: total=21609301 threecol=42667 notVC=21566634 vcWithCritEdge=0 TARGET=0 badline=0
 ```
 
-The SMS graph streams are not included here because the n=13 stream is large.
-The CNF files, SMS command shape, checker source, and expected summaries are in
-`sixreg/README.md`.
+The SMS graph streams are not included here because the n=13/n=14 streams are
+large. The CNF files, SMS command shape, checker source, n=14 chunk summaries,
+and expected summaries are in `sixreg/README.md`.
 
 ## AI Disclosure
 

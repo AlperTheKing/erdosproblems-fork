@@ -1,0 +1,5 @@
+internal vertices: [0, 4, 8]
+v=0: colourings of H-v: 6, with all counts>=2 on N(v): 0
+v=4: colourings of H-v: 6, with all counts>=2 on N(v): 0
+v=8: colourings of H-v: 6, with all counts>=2 on N(v): 0
+H KILLED (9-shores fully excluded)

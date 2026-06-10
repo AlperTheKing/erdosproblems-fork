@@ -1,6 +1,6 @@
 # Erdős #944 verification status
 
-Updated: 2026-06-10 Europe/Istanbul.
+Updated: 2026-06-11 Europe/Istanbul.
 
 ## Target
 
@@ -10,8 +10,9 @@ graph with no critical edge, or a proof none exists.
 Current publishable-secondary candidate is narrower:
 
 1. verified exhaustive lower bound for the Skottova-Steiner 2025 Problem 5.2
-   subproblem: no 6-regular `(4,1)` graph on `n <= 13`;
-2. structural rigidity lemmas for any hypothetical 6-regular target.
+   subproblem: no 6-regular `(4,1)` graph on `n <= 14`;
+2. structural rigidity lemmas for any hypothetical 6-regular target, including
+   no nontrivial 6-edge-cut shore of size at most 9 in the 6-regular case.
 
 This is not yet a full resolution of #944.
 
@@ -56,14 +57,37 @@ This is not yet a full resolution of #944.
   - `n=13`: 367,860 six-regular graphs.
     - `experiments/sixreg/check_n13_summary2.out`
     - SHA256 `13EC862D7E79951E8DFF5E4BA52173778C8EA8A79C209C922FBB184DD9C7F8EE`
-  - Summary from `RESEARCH_LOG.md`: no 6-regular `(4,1)` graph for `n<=13`;
-    exactly one 6-regular 4-vertex-critical graph at `n=13`, and it has
-    critical edges.
+  - Summary: no 6-regular `(4,1)` graph for `n<=13`; exactly one 6-regular
+    4-vertex-critical graph at `n=13`, and it has critical edges.
+  - `n=14`: 21,609,301 six-regular graphs, checked twice by different native
+    chunk partitions.
+    - `experiments/sixreg/n14_chunks`: 110 residue classes, aggregate
+      `total=21609301 threecol=42667 notVC=21566634 vcWithCritEdge=0 TARGET=0 badline=0`.
+    - `experiments/sixreg/n14_chunks_v2`: 73 residue classes, identical
+      aggregate.
+    - Conclusion: no 6-regular 4-vertex-critical graph on 14 vertices at all.
+
+- `experiments/sixreg/enum_9shore.cpp`,
+  `experiments/sixreg/verify_9shore_survivor.py`,
+  `experiments/sixreg/kill_9shore_survivor.py`
+  - Computer-assisted 9-shore exclusion for 6-regular targets.
+  - nauty/C++ filter over 729 connected 9-vertex, 24-edge, max-degree-6
+    candidates leaves one survivor (`HEzftz{`, `b=011101110`).
+  - Independent Python recount reproduces the classification.
+  - Local multiplicity kill: for each internal vertex `0,4,8`, all 6 proper
+    3-colourings of the survivor with that vertex deleted leave a colour
+    appearing at most once in its neighbourhood.
+  - Conclusion: no nontrivial 6-edge-cut shore has size `9` in a 6-regular
+    `(4,1)` target; combined with the T1 `2..8` argument, all such shores have
+    size at least `10`.
 
 ## Pending / Needs Stronger Evidence
 
-- teorth draft PR #314 is open with a one-line database comment. Reviewer may
-  request stronger public artifact links before accepting.
+- teorth PR #314 is open/ready for review with a one-line database comment.
+  A public artifact branch is available, but the artifact link could not be
+  inserted into the PR body/comment automatically because the GitHub connector
+  lacks write permission on `teorth/erdosproblems` and browser text insertion
+  hit the virtual clipboard limitation.
 - Decide which parts should get additional Lean coverage beyond the current
   cores.
 
@@ -74,12 +98,16 @@ and adversarial verification:
 
 - write the rigidity lemmas cleanly with the red-team wording corrections;
 - monitor/respond to teorth PR #314 review;
-- decide whether to strengthen with a public artifact repository or a pruned
-  `n=14` attack.
+- manually add the artifact link to PR #314 if a reviewer asks or browser input
+  becomes available;
+- fold the `n=14` closure and 9-shore exclusion into the public artifact
+  branch / PR wording after final review.
 
 ## Publication Status
 
-- Draft PR: https://github.com/teorth/erdosproblems/pull/314
+- PR: https://github.com/teorth/erdosproblems/pull/314
 - Branch: `AlperTheKing/erdosproblems-fork:erdos944-sixreg-progress`
 - Commit: `bce7260`
 - Scope: one `data/problems.yaml` comment, status remains `open`.
+- Public artifacts:
+  https://github.com/AlperTheKing/erdosproblems-fork/tree/erdos944-artifacts/artifacts/erdos944-sixreg
