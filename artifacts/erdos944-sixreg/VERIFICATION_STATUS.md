@@ -12,7 +12,7 @@ Current publishable-secondary candidate is narrower:
 1. verified exhaustive lower bound for the Skottova-Steiner 2025 Problem 5.2
    subproblem: no 6-regular `(4,1)` graph on `n <= 14`;
 2. structural rigidity lemmas for any hypothetical 6-regular target, including
-   no nontrivial 6-edge-cut shore of size at most 9 in the 6-regular case.
+   no nontrivial 6-edge-cut shore of size at most 10 in the 6-regular case.
 
 This is not yet a full resolution of #944.
 
@@ -81,6 +81,18 @@ This is not yet a full resolution of #944.
     `(4,1)` target; combined with the T1 `2..8` argument, all such shores have
     size at least `10`.
 
+- `experiments/sixreg/enum_10shore.cpp`,
+  `experiments/sixreg/verify_10shore.py`
+  - Computer-assisted 10-shore exclusion for 6-regular targets.
+  - nauty/C++ filter over 18,655 connected 10-vertex, 27-edge,
+    max-degree-6 candidates leaves no survivors:
+    `total=18655 badDeficiency=0 not3col=18345 badBoundaryVec=197 comparableNonNbr=86 localMultiplicityKill=27 SURVIVORS=0`.
+  - Independent Python recount reproduces the same classification:
+    `{'badvec': 197, 'badcomp': 86, 'not3col': 18345, 'badlocal': 27}`.
+  - Conclusion: no nontrivial 6-edge-cut shore has size `10` in a
+    6-regular `(4,1)` target; combined with the previous exclusions, all such
+    shores have size at least `11`.
+
 ## Pending / Needs Stronger Evidence
 
 - teorth PR #314 is open/ready for review with a one-line database comment.
@@ -100,7 +112,7 @@ and adversarial verification:
 - monitor/respond to teorth PR #314 review;
 - manually add the artifact link to PR #314 if a reviewer asks or browser input
   becomes available;
-- fold the `n=14` closure and 9-shore exclusion into the public artifact
+- fold the `n=14` closure and 9/10-shore exclusions into the public artifact
   branch / PR wording after final review.
 
 ## Publication Status

@@ -1,0 +1,2 @@
+python recount: {'badvec': 197, 'badcomp': 86, 'not3col': 18345, 'badlocal': 27}
+survivors: []

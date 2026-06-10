@@ -15,7 +15,7 @@ The verified partial result is:
 The package also records the verified 6-cut rigidity statement:
 
 > In a 6-regular `(4,1)` graph, every nontrivial 6-edge-cut shore has at least
-> 10 vertices.
+> 11 vertices.
 
 Here `(4,1)` means a 4-vertex-critical graph with no critical edge.
 Skottova-Steiner 2025 ask explicitly whether a 6-regular `(4,1)` graph exists

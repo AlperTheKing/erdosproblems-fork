@@ -29,6 +29,9 @@ Problem 5.2 subproblem: whether a 6-regular `(4,1)` graph exists.
   `kill_9shore_survivor.py`:
   computer-assisted exclusion of 9-vertex shores of nontrivial 6-edge-cuts in
   6-regular targets.
+- `enum_10shore.cpp`, `verify_10shore.py`:
+  computer-assisted exclusion of 10-vertex shores of nontrivial 6-edge-cuts in
+  6-regular targets.
 
 ## Re-running the Checker
 
@@ -91,8 +94,8 @@ different chunk partitions.
 The verified local structural conclusion is:
 
 ```text
-In a 6-regular (4,1) graph, every nontrivial 6-edge-cut shore has at least 10 vertices.
+In a 6-regular (4,1) graph, every nontrivial 6-edge-cut shore has at least 11 vertices.
 ```
 
-The 9-shore step is machine-assisted and depends on 6-regularity; do not state
-it for general minimum-degree-six targets without a separate argument.
+The 9/10-shore steps are machine-assisted and depend on 6-regularity; do not
+state them for general minimum-degree-six targets without a separate argument.

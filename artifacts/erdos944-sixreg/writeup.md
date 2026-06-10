@@ -237,6 +237,43 @@ shores of size `>= 10`; in particular for `n <= 19` every such graph is
 super-6-edge-connected. This corollary uses 6-regularity and is not being
 claimed for general `delta >= 6` graphs.
 
+### Lemma 7: No 10-shores in the 6-regular case
+
+No nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has a shore of size 10.
+
+Again this is finite and machine-assisted. A 10-shore `A` is connected
+(otherwise one component has boundary at most 5), has `e(G[A])=27`,
+`Delta(G[A]) <= 6`, and deficiency sum `sum_v (6-deg_{G[A]}(v))=6`.
+
+Running
+
+```powershell
+geng -c -D6 10 27:27 | enum_10shore.exe
+```
+
+checks 18,655 connected candidates and gives:
+
+```text
+total=18655 badDeficiency=0 not3col=18345 badBoundaryVec=197 comparableNonNbr=86 localMultiplicityKill=27 SURVIVORS=0
+```
+
+The independent Python recount (`verify_10shore.py`) gives the same
+classification:
+
+```text
+python recount: {'badvec': 197, 'badcomp': 86, 'not3col': 18345, 'badlocal': 27}
+survivors: []
+```
+
+The filters are the same verified necessary conditions as in Lemma 6:
+the 6-cut boundary-vector condition for every proper 3-colouring, the
+comparable-non-neighbour obstruction at `b=0` vertices, and the local
+multiplicity test at `b=0` vertices.
+
+Corollary 7a: every nontrivial 6-edge-cut in a 6-regular `(4,1)` graph has both
+shores of size `>= 11`; in particular for `n <= 21` every such graph is
+super-6-edge-connected. This strengthened corollary also uses 6-regularity.
+
 ## Lean / Formal Cores
 
 `E:\Projects\ErdosProblems\formal-conjectures\erdos944_cores.lean` compiles

@@ -152,6 +152,32 @@ exact open subquestions). Budgets: iter 5/40, consults 1/12.
   internal vertices with `N_G(v)=N_A(v)`). Do not state it for general
   `delta >= 6` targets without a separate argument.
 
+# (2026-06-11 ~00:25) 10-shore exclusion COMPLETE
+- [VERIFIED NUMERICALLY, independent C++ + Python] No 10-vertex shore of a
+  nontrivial 6-edge-cut can occur in a 6-regular `(4,1)` target.
+  * Candidate setup: a 10-shore `A` is connected (otherwise some component has
+    boundary at most 5, contradicting the known cut lower bound), has
+    `e(G[A]) = 27`, `Delta(G[A]) <= 6`, and deficiency
+    `b(v) = 6 - deg_A(v)` with total 6.
+  * C++ filter:
+    `geng -c -D6 10 27:27 | enum_10shore.exe` classifies 18,655 connected
+    candidates:
+    `total=18655 badDeficiency=0 not3col=18345 badBoundaryVec=197
+    comparableNonNbr=86 localMultiplicityKill=27 SURVIVORS=0`.
+  * Independent Python recount (`verify_10shore.py`) on the same nauty stream
+    reproduces the classification:
+    `{'badvec': 197, 'badcomp': 86, 'not3col': 18345, 'badlocal': 27}` and
+    `survivors: []`.
+  * Filters are the same verified necessary conditions as the 9-shore run:
+    6-cut row-sum boundary vectors for every proper 3-colouring, comparable
+    non-neighbour obstruction at `b=0` vertices, and local multiplicity kill
+    at `b=0` vertices.
+  Conclusion: in a 6-regular `(4,1)` target every nontrivial 6-edge-cut shore
+  has size at least 11; therefore any such graph on `n <= 21` is
+  super-6-edge-connected.
+- Scope warning remains: the 9/10-shore finite exclusions use 6-regularity and
+  the fixed deficiency formula `b(v)=6-deg_A(v)`.
+
 # (2026-06-11 ~00:20) SHORE-EXCLUSION MACHINE: 9,10,11,12 ALL EXCLUDED (a=13 running)
 - Native pipeline (user directive: no WSL): geng.exe (nauty 2.8.9, clang-built, validated
   vs SMS chain exactly) + enum_shore.cpp filter battery, all NECESSARY conditions:
